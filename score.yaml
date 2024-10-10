@@ -1,0 +1,31 @@
+apiVersion: score.dev/v1b1
+
+metadata:
+  name: idp-microservice-b
+
+containers:
+  container-id:
+    image: .
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do echo Hello friend!; sleep 5; done"]
+    variables:
+      SPRING_DATASOURCE_URL: postgresql://${resources.db.username}:${resources.db.password}@${resources.db.host}:${resources.db.port}/${resources.db.name}
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: consol
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      SPRING_RABBITMQ_HOST: ${resources.queue.host}
+      SPRING_RABBITMQ_PORT: ${resources.queue.port}
+      #OPENTRACING_JAEGER_UDP-SENDER_HOST: observability-jaeger
+      #LOGSTASH_HOST: observability-logstash:5000
+
+resources:
+  db:
+    type: postgres
+  queue:
+    type: amqp
+
+service:
+  ports:
+    www:
+      port: 80
+      targetPort: 8080

@@ -1,0 +1,3 @@
+FROM docker.io/library/openjdk:17-slim
+COPY target/microserviceB-*.jar microserviceB.jar
+ENTRYPOINT ["java","-jar","/microserviceB.jar"]
